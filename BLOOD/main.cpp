@@ -1,3 +1,12 @@
+
+
+
+
+// v0.1.1-Pre-Alpha
+
+
+
+
 #include <iostream>
 #include <string>
 #include <unistd.h>
@@ -64,7 +73,7 @@ menu:
     // Аски-арты.
 
 
-    std::string room1 = R"(
+    std::string room1_1 = R"(
 
 
 
@@ -329,10 +338,10 @@ std::string room2_2_1 = R"(
             *  / \ |                 |      *        ВЫ НЕ ВИДЕТЕ ЧТО НА НЕЙ НАПИСАНО..
             * /___\|     _______     |      *   
             * |___||    (       )    |      *    
-            *      |    | *   * |    |      *    СЕСТЬ НА КРЕСЛО - [1]
-            * *    |  __|   *   |__  | *    *    ЗАЙТИ В ЛЕВУЮ ДВЕРЬ - [2]
-            *      | (!!)_______(!!) |      *    ЗАЙТИ В ПРАВУЮ ДВЕРЬ - [3]
-            *      | |  | ~~~~~ |  | |      *      
+            *      |    | *   * |    |      *    
+            * *    |  __|   *   |__  | *    *    ЗАЙТИ В ЛЕВУЮ ДВЕРЬ - [1]
+            *      | (!!)_______(!!) |      *    ЗАЙТИ В ПРАВУЮ ДВЕРЬ - [2]
+            *      | |  | ~~~~~ |  | |      *    СЕСТЬ НА КРЕСЛО - [3]
             * _____|~|__|~~~~~~~|__|~|_____ *      
             *                               *
             *                               *
@@ -366,8 +375,8 @@ std::string room2_2_1 = R"(
             * _____                   _____ *      
             *  / \ |                 |      *       
             * /___\|     _______     |      *   
-            * |___||    (       )    |      *   ЗАЙТИ В ЛЕВУЮ ДВЕРЬ - [2]   
-            *      |    | *   * |    |      *   ЗАЙТИ В ПРАВУЮ ДВЕРЬ - [3]  
+            * |___||    (       )    |      *   ЗАЙТИ В ЛЕВУЮ ДВЕРЬ - [1]   
+            *      |    | *   * |    |      *   ЗАЙТИ В ПРАВУЮ ДВЕРЬ - [2]  
             * *    |  __|   *   |__  | *    *    
             *      | (!!)_______(!!) |      *    
             *      | |  | ~~~~~ |  | |      *     
@@ -385,116 +394,110 @@ std::string room2_2_1 = R"(
 
     int room = 1;    // В какой комнате находится игрок.
     int mood = 0;    // Уровень настроениея игрока. >0 - радостный, <0 - грустный.
+    int state_room = 0;    // Состояние комнаты. Например: только зашел; посидел на кресле, и тд.
+    char choice;    //  Выбор внутри комнаты.
 
-    while (room !=0) {    // Зацикливание по кругу.
+    while (room !=0) {    // Зацикливание по кругу пока комната не будет 0 (конец игры).
 
-    // Первая комната.
-            
+
         if (room == 1) {
-            
-            std::cout << "\033[H\033[2J";
-            std::cout << room1;
-        
-            char choice;
-            while (true) {
-                choice = getch();
 
-                if (choice == '1') {
+            std::cout << "\033[H\033[2J";    //  Чтобы отчистить терминал перед следующим кадром.
+            std::cout << room1_1;    //  Арт первой комнаты.
 
-                    room = 2;
-                    break;
-                }
-                else if (choice == '2') {
-            
+            while (true) {    //  Зацикливание чтобы дождаться выбора.
+                choice = getch();    //  выбор = 'нажатие игрока';.
+
+                if (choice == '2') {
+
                     std::cout << "\033[H\033[2J";
                     std::cout << room1_2;
                 }
-            }
-        }
 
-   // Вторая комната.
+                else if (choice == '1') {
+
+                    room = 2;    //  Переход в следующую комнату.
+                    break;
+                }
+                    
+            }    //  Цикл в первой комнате.
+            
+        }    // If первой комнаты.
+
 
         else if (room == 2) {
 
-
             std::cout << "\033[H\033[2J";
-            std::cout << room2;
-
-            char choice;
+            std::cout << room2_1_1;
+            
             while (true) {
                 choice = getch();
 
-                if (choice == '1') {
-
-                    std::cout << "\033[H\033[2J";
-                    mood = mood + 1;
-                    std::cout << room2_1_1;
-                    std::cin.get();
-                    choice = '5';
-                    break;
-
-            }
-
-                else if (choice == '2') {
-
-                    std::cout << "\033[H\033[2J";
-                    mood = mood + 1;
-                    std::cout << room2_1_2;
-                    std::cin.get();
-                    choice = '5';
-                    break;
-            }
-
-                else if (choice == '3') {
-
-                    std::cout << "\033[H\033[2J";
-                    std::cout << room2_1_3;
-            }
-
-                else if (choice == '4') {    // Не послушал музыку.
+                if (choice == '4') {
 
                     std::cout << "\033[H\033[2J";
                     std::cout << room2_2_1;
-                    int sit = false;
-room2:
-                    char choice;
-                        while (true) {
-                            choice = getch();
+                    int armchair = 0;
 
-                            if (choice == '1') {
+                    while (true) {
+                        choice = getch();
 
-                                
-                                if (sit == true) {
+                        if (choice == '3' && armchair == false) {
 
-                                    goto room2;
-                                }
-
-                                else if (sit == false) {
-
-                                    std::cout << room2_2_2;
-                                    mood = mood + 1;
-                                    sit = true;
-                                }
-                                
-                            }
-
-                            else if (choice == '2') {
-            
-                                std::cout << "\033[H\033[2J";
-                                std::cout << room1_2;
-                            }
+                            
+                            std::cout << "\033[H\033[2J";
+                            std::cout << room2_2_2;
+                            mood = mood + 2;
+                            break;
 
                         }
+                    }
                 }
-
-                else if (choice == '5') {    // Послушал музыку.
-
-                    std::cout << room2_2_2;
-
             }
+
         }
-    }
-}
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }    // Цикл комнат.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -502,4 +505,4 @@ room2:
 
 
     return 0;
-}
+}    // Main.
